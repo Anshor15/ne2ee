@@ -1,0 +1,15 @@
+{
+  "name": "ne2ee",
+  "version": "1.0.0",
+  "description": "NodeJs End to End Encryption pair with Flutter version.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Anshorulloh Nur Aziz <anshorullohnuraziz15@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "node-jsencrypt": "^1.0.0"
+  }
+}
