@@ -1,13 +1,23 @@
 const crypto = require('crypto')
 const JSEncrypt = require('node-jsencrypt');
 
+/**
+ * 
+ * @param {string} selfPrivateKey Private Key for decrypt data
+ * @param {string} otherPublicKey Public Key for encrypt data
+ * @param {Buffer} aesKey AES Key
+ */
 class NE2EE {
-    constructor({ selfPrivateKey, otherPublicKey, aesKey = Buffer.from() }) {
+    constructor({ selfPrivateKey, otherPublicKey, aesKey }) {
         this.privateKey = selfPrivateKey;
         this.publicKey = otherPublicKey;
         this.aesKey = aesKey
     }
-
+    /**
+     * 
+     * @param {string} encrypted String encrypted data
+     * @returns Decrypted string data
+     */
     decrypt(encrypted) {
         try {
             //#region Get RSA and AES key
@@ -46,6 +56,12 @@ class NE2EE {
         }
     }
 
+    /**
+     * 
+     * @param {string} data Encrypted data
+     * @param {{algorithm: 'aes-256-cbc'}} aesAlgorithm Default is aes-256-cbc
+     * @returns Base64 encrypted data
+     */
     encrypt(data, aesAlgorithm = { algorithm: 'aes-256-cbc' }) {
         const publicKey = this.publicKey;
         const aesKey = this.aesKey;
@@ -65,4 +81,44 @@ class NE2EE {
     }
 }
 
+/**
+ * 
+ * @param {int} aesKeySize AES key size, default is 16
+ * @param {int} rsaKeyLength RSA key length, default is 2048
+ * @param {'spki' | 'pkcs1'} publicKeyType Default type is 'spki'
+ * @param {string} publicKeyFormat Default is 'pem'
+ * @param {'pkcs1' | 'pkcs8'} privateKeyType Default is 'pkcs8'
+ * @param {string} privateKeyFormat Default is 'pem'
+ * @returns Object key pair
+ */
+function generateKey(
+    aesKeySize = 16,
+    rsaKeyLength = 2048,
+    publicKeyType = 'spki',
+    publicKeyFormat = 'pem',
+    privateKeyType = 'pkcs8',
+    privateKeyFormat = 'pem'
+) {
+    const aesKey = crypto.randomBytes(aesKeySize)
+    const rsaKeyPair = crypto.generateKeyPairSync('rsa', {
+        modulusLength: rsaKeyLength,
+        publicKeyEncoding: {
+            type: publicKeyType,
+            format: publicKeyFormat,
+        },
+        privateKeyEncoding: {
+            type: privateKeyType,
+            format: privateKeyFormat
+        }
+    })
+
+    const keyPair = {
+        rsaKeyPair,
+        aesKey
+    }
+
+    return keyPair
+}
+
 exports.NE2EE = NE2EE
+exports.generateKey = generateKey
