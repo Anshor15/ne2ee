@@ -2,6 +2,8 @@
  
 This is node js module use for simple end to end encryption. This code use simple combination of AES and RSA algorithm.
 
+For Flutter version you can look [here](https://github.com/Anshor15/fe2ee).
+
 # Example
 
 ```javascript
