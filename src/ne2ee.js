@@ -35,7 +35,7 @@ class NE2EE {
             const crypt = new JSEncrypt();
             crypt.setPrivateKey(privateKey);
             var decryptedRsa = crypt.decrypt(encryptedIv.toString('utf8'));
-            var iv = Buffer.from(decryptedRsa, 'hex')
+            var iv = Buffer.from(decryptedRsa, 'base64')
             //#endregion
 
             //#region Decrypt data
